@@ -1,4 +1,124 @@
 $(function() {
+  // my code - exercises
+  // product page has pathname /detail.html
+
+  // when user reaches the product page, trigger a view:productPage event
+  // when window.location.pathname = '/detail.html', trigger view:
+  /* $(document).trigger("view:productPage"); */
+
+  // when user reaches the product page, inspect the breadcrumb element (which category in category in category the user is in)
+  // if breadcrumbs include "male", trigger customer:Male
+  // if breadcrumbs include "female", trigger customer:Female
+  // if breadcrumbs include "{product subcategory}", trigger view:{product subcategory}
+
+  // when user reaches the /checkout4.html page, trigger "conversion" event WHEN user clicks on "Place an Order" btn
+
+  // in "conversion" event, put extra object parameter {name, qualtity, unit price} of each purchased product
+
+  /* if pathname is /index.html, trigger view:HomePage event etc.*/
+
+  function getPageName() {
+    var pathname = window.location.pathname;
+    if (pathname === "/index.html") {
+      return "HomePage";
+    } else if (pathname.indexOf("detail.html") > -1) {
+      //the pathname includes '', not necessarily is exactly ''
+      return "ProductPage";
+    } else if (pathname.indexOf("basket.html") > -1) {
+      return "Basket";
+    } else if (pathname.indexOf("checkout1.html") > -1) {
+      return "Checkout";
+    } else if (pathname.indexOf("checkout2.html") > -1) {
+      return "Delivery";
+    } else if (pathname.indexOf("checkout3.html") > -1) {
+      return "Payment";
+    } else if (pathname.indexOf("checkout4.html") > -1) {
+      return "OrderReview";
+    } else {
+      return "";
+    }
+  }
+
+  function getProductInfo() {
+    //get product name, put it nicely into an object
+    return {
+      productName: $("#productMain h1").text(),
+      productPrice: $("#productMain .price").text()
+    };
+  }
+
+  function getCartSummary() {
+    var _products = [];
+
+    // select the product info and push it into the array _products
+
+    return {
+      totalPrice: "blah", //total price here
+      products: _products
+    };
+  }
+
+  function getParam() {
+    //get extra parameters to pass to triggerPageEvent function
+    var pageName = getPageName();
+    var result = null; // when neither of the ifs is relevant to the page, return null, so that triggerPageEvent works as if without extra param, cause no param = null in this case
+
+    if (pageName === "ProductPage") {
+      result = getProductInfo();
+      return result;
+    } else if (pageName === "OrderReview") {
+      result = getCartSummary();
+      return result;
+    }
+
+    return result; // for the pages with no extra params it is null
+  }
+
+  function triggerPageEvent() {
+    var pageName = getPageName();
+    var params = getParam();
+
+    if (pageName === "") {
+      return; // don't trigger anything if the pathname is empty
+    }
+
+    if (pageName === "OrderReview") {
+      $(".box-footer [type='submit']").click(function() {
+        $(document).trigger("conversion", params);
+      });
+      return;
+    }
+
+    $(document).trigger("view:" + pageName, params);
+    //e.g. $(document).trigger('view:ProductPage', {productName: blah, productPrice: 100});
+  }
+
+  triggerPageEvent();
+
+  //clicking on 'Place an order' triggers 'conversion'
+  $(".box-footer [type='submit']").click(function() {
+    /*  var extraParam = {
+      {productName:
+      productPrice:
+    purchaseQuantity:
+  totalPrice:},
+      {productName:
+        productPrice:
+      purchaseQuantity:
+    totalPrice:}
+    }; */
+    $(document).trigger("conversion", extraParam);
+    console.log("user clicked the place an order button");
+  });
+
+  //
+  //
+  //
+  //
+  //
+  //
+  // end of my code
+
   $(".shop-detail-carousel").owlCarousel({
     items: 1,
     thumbs: true,
@@ -209,63 +329,3 @@ $.fn.alignElementsSameHeight = function() {
     children.innerHeight(maxHeight);
   });
 };
-
-// my code - exercises
-// product page has pathname /detail.html
-
-// when user reaches the product page, trigger a view:productPage event
-// when window.location.pathname = '/detail.html', trigger view:
-$(document).trigger("view:productPage");
-
-// when user reaches the product page, inspect the breadcrumb element (which category in category in category the user is in)
-// if breadcrumbs include "male", trigger customer:Male
-// if breadcrumbs include "female", trigger customer:Female
-// if breadcrumbs include "{product subcategory}", trigger view:{product subcategory}
-
-// when user reaches the /checkout4.html page, trigger "conversion" event WHEN user clicks on "Place an Order" btn
-
-// in "conversion" event, put extra object parameter {name, qualtity, unit price} of each purchased product
-
-/* if pathname is /index.html, trigger view:HomePage event */
-
-if (
-  window.location.pathname === "/" ||
-  window.location.pathname === "/index.html"
-) {
-  $(document).trigger("view:HomePage");
-  console.log("User on home page");
-}
-
-if (window.location.pathname === "/detail.html") {
-  $(document).trigger("view:ProductPage");
-  console.log("User on product page");
-}
-
-if (window.location.pathname === "/basket.html") {
-  $(document).trigger("view:Basket");
-  console.log("User on basket page");
-}
-
-if (window.location.pathname === "/checkout1.html") {
-  $(document).trigger("view:Checkout");
-  console.log("User on checkout page");
-}
-
-if (window.location.pathname === "/checkout2.html") {
-  $(document).trigger("view:Delivery");
-  console.log("User on delivery page");
-}
-
-if (window.location.pathname === "/checkout3.html") {
-  $(document).trigger("view:Payment");
-  console.log("User on payment page");
-}
-
-if (window.location.pathname === "/checkout4.html") {
-  console.log("User on order review page");
-}
-
-$(".box-footer [type='submit']").click(function() {
-  $(document).trigger("conversion");
-  console.log("user clicked the place an order button");
-});

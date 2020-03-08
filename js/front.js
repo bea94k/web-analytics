@@ -52,8 +52,24 @@ $(function() {
 
     // select the product info and push it into the array _products
 
+    document.querySelectorAll("#checkout tbody tr").forEach(function(product) {
+      // for each row, that is a product on the list get the name, price and quantity (get all the cells of a row, take the second for the name, third for quantity, fourth for price, choose their inner text)
+      var _name = product.querySelectorAll("td")[1].querySelector("a")
+        .innerHTML;
+      var _price = product.querySelectorAll("td")[3].innerHTML;
+      var _quantity = product.querySelectorAll("td")[2].innerHTML;
+      // make an object of each product/row
+      var _product = {
+        productName: _name,
+        productPrice: _price,
+        productQuantity: _quantity
+      };
+      // add product object into the objects array
+      _products.push(_product);
+    });
+
     return {
-      totalPrice: "blah", //total price here
+      totalPrice: $("tfoot th")[1],
       products: _products
     };
   }

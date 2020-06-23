@@ -1,8 +1,8 @@
-################################################################################################
+# Web Analytics - BCH
 
-Readme for Obaju : e-commerce template by Bootstrapious - https://bootstrapious.com
+Web Analytics (Google Analytics) practice for REACT20K Intro to JavaScript course at Business College Helsinki, using template of e-commerce site Obaju.
 
-################################################################################################
+## Readme for Obaju : e-commerce template by Bootstrapious - https://bootstrapious.com
 
 Hi,
 
